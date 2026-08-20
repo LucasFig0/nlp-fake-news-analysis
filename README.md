@@ -40,20 +40,23 @@ Automated misinformation detection is no longer solely a classification exercise
 
 ## Methodology & Pipeline Architecture
 
-```text
-Raw Corpus (ISOT/WELFake) 
-   │
-   ├──► Text Preprocessing (Regex noise removal, lowercasing, stopword stripping)
-   │
-   ├──► Exploratory Data Analysis (Class balance & top n-grams extraction)
-   │
-   ├──► Stratified Split (80% Train / 20% Test)
-   │       │
-   │       ├──► Supervised Pipeline 1: TF-IDF (1-2 N-grams) + Logistic Regression
-   │       └──► Supervised Pipeline 2: TF-IDF (1-2 N-grams) + Multinomial Naive Bayes
-   │
-   └──► Zero-Shot Pipeline: facebook/bart-large-mnli (Inference on test holdout)
 
+```mermaid
+flowchart TD
+    A[Raw News Corpus] --> B[Text Preprocessing & Regex Cleaning]
+    B --> C[Exploratory Data Analysis & N-Grams]
+    C --> D[Stratified Split 80/20]
+    
+    D --> E[TF-IDF Vectorizer 1-2 N-Grams]
+    D --> F[Zero-Shot LLM Inference facebook/bart-large-mnli]
+    
+    E --> G[Logistic Regression]
+    E --> H[Multinomial Naive Bayes]
+    
+    G --> I[Evaluation & Benchmark Metrics]
+    H --> I
+    F --> I
+```
 ## Empirical Benchmarks
 
 All models were evaluated on a held-out test split under identical conditions:
